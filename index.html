@@ -491,45 +491,98 @@ const io=new IntersectionObserver(entries=>entries.forEach(e=>{
 }),{threshold:.08});
 document.querySelectorAll('.card').forEach((c,i)=>{c.dataset.d=i%3*100;io.observe(c)});
 
-/* Dinamik İlan Veritabanı (Panelden Çekilen) */
+/* Dinamik İlan Veritabanı ve İsim Güncelleme */
         let db = {};
+        
+        // Firma ismini her yerde güncelle
+        document.querySelectorAll('.l1, .foot-logo').forEach(el => el.textContent = 'İkizler İnşaat');
+        document.title = 'İkizler İnşaat — Gayrimenkul & Galeri';
+
         fetch('/ilanlar_data.json')
           .then(res => res.json())
           .then(data => {
             const grid = document.getElementById('grid');
+            const slider = document.getElementById('slider');
+            const sdots = document.querySelector('.sdots');
             const ilanlar = data.ilan_listesi || [];
             
-            // Site yüklenirken içinde duran sabit ilanları temizle
             grid.innerHTML = ''; 
+            slider.innerHTML = '';
+            sdots.innerHTML = '';
             
+            let featuredCount = 0;
+
             ilanlar.forEach((ilan, i) => {
-              // Tıklanınca açılacak Modal penceresi için verileri kaydet
               db[i] = {
                 title: ilan.title,
                 desc: ilan.description,
                 img: ilan.image,
-                cat: ilan.category + ' · ' + ilan.location
+                cat: ilan.category + ' · ' + ilan.location,
+                meta: ilan.meta
               };
-              
-              // İlan kartını siteye (vitrine) ekle
+
+              // 1. TÜM İLANLAR KISMINA EKLE
               const card = `
-                <article class='card vis' data-cat='${ilan.category}' onclick='openModal(${i})'>
-                  <div class='card-img'>
-                    <img src='${ilan.image}' alt='${ilan.title}'/>
-                    <div class='card-veil'></div>
+                <article class="card vis" data-cat="${ilan.category}" onclick="openModal(${i})">
+                  <div class="card-img">
+                    <img src="${ilan.image}" alt="${ilan.title}"/>
+                    <div class="card-veil"></div>
                   </div>
-                  <div class='card-body' style='color:#0e0e0e'>
-                    <div class='card-loc'>${ilan.location}</div>
-                    <div class='card-title'>${ilan.title}</div>
-                    <div style='font-size:12px; margin-bottom:10px; color:#666;'>${ilan.meta}</div>
-                    <button class='card-link'>Detay Gör</button>
+                  <div class="card-body" style="color:#0e0e0e">
+                    <div class="card-loc">${ilan.location}</div>
+                    <div class="card-title">${ilan.title}</div>
+                    <div style="font-size:12px; margin-bottom:10px; color:#666;">${ilan.meta}</div>
+                    <button class="card-link">Detay Gör</button>
                   </div>
                 </article>
               `;
               grid.innerHTML += card;
+
+              // 2. ÖNE ÇIKANLAR (SLIDER) KISMINA EKLE
+              if(ilan.featured === true) {
+                const slide = `
+                  <div class="slide ${featuredCount === 0 ? 'active' : ''}" data-id="${i}">
+                    <div class="slide-img"><img src="${ilan.image}"/><div class="sl-badge">Öne Çıkan</div></div>
+                    <div class="slide-body">
+                      <div>
+                        <div class="slide-cat"><span class="lbl">${ilan.category} · ${ilan.location}</span></div>
+                        <h3 class="slide-h">${ilan.title}</h3>
+                        <p class="slide-d">${ilan.description.substring(0, 120)}...</p>
+                        <div class="slide-specs">
+                          <div class="sspec"><div class="sspec-v">${ilan.meta}</div><div class="sspec-l">Özellik</div></div>
+                        </div>
+                      </div>
+                      <button class="btn-g" onclick="openModal(${i})" style="align-self:flex-start">Detayları Gör</button>
+                    </div>
+                  </div>
+                `;
+                slider.innerHTML += slide;
+                sdots.innerHTML += `<div class="sdot ${featuredCount === 0 ? 'on' : ''}"></div>`;
+                featuredCount++;
+              }
             });
-          })
-          .catch(err => console.log('İlanlar henüz eklenmemiş.'));
+            
+            // Slider işlevselliğini yeni gelen ilanlara göre başlat
+            initSlider(); 
+          });
+
+        function initSlider() {
+            // Slider butonlarını ve geçişlerini burada tekrar tanımlıyoruz
+            const slides = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('.sdot');
+            let curIdx = 0;
+            if(slides.length === 0) return;
+
+            window.goTo = (i) => {
+                slides[curIdx].classList.remove('active');
+                dots[curIdx].classList.remove('on');
+                curIdx = (i + slides.length) % slides.length;
+                slides[curIdx].classList.add('active');
+                dots[curIdx].classList.add('on');
+            };
+            document.getElementById('next').onclick = () => window.goTo(curIdx + 1);
+            document.getElementById('prev').onclick = () => window.goTo(curIdx - 1);
+        }
 
 /* Modal */
 function openModal(id){

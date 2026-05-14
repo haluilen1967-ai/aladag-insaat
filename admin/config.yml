@@ -23,3 +23,7 @@ collections:
               - {label: "Açıklama", name: "description", widget: "text"}
               - {label: "Özellikler (örn: 3+1, Otomatik)", name: "meta", widget: "string"}
               - {label: "İlan Görseli", name: "image", widget: "image"}
+              # ... (önceki kodların devamı)
+              - {label: "Özellikler (örn: 3+1, Otomatik)", name: "meta", widget: "string"}
+              - {label: "İlan Görseli", name: "image", widget: "image"}
+              - {label: "Öne Çıkarılsın mı?", name: "featured", widget: "boolean", default: false} # YENİ EKLENEN
