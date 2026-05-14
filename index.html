@@ -583,20 +583,42 @@ document.querySelectorAll('.card').forEach((c,i)=>{c.dataset.d=i%3*100;io.observ
             initSlider(); 
           });
 
-/* Modal */
-function openModal(id){
-  const d=db[id];if(!d)return;
-  document.getElementById('mimg').src=d.img;
-  document.getElementById('mbadge').textContent=d.badge;
-  document.getElementById('mcat').textContent=d.cat;
-  document.getElementById('mtitle').textContent=d.title;
-  document.getElementById('mdesc').textContent=d.desc;
-  document.getElementById('mspecs').innerHTML=d.specs.map(([v,l])=>`<div class="mspec"><div class="mspec-v">${v}</div><div class="mspec-l">${l}</div></div>`).join('');
+/* Güncellenmiş Modal Fonksiyonu */
+function openModal(id) {
+  const d = db[id];
+  if(!d) return;
+  
+  // Temel resim ve metinleri yerleştir
+  document.getElementById('mimg').src = d.img || '';
+  document.getElementById('mcat').textContent = d.cat || '';
+  document.getElementById('mtitle').textContent = d.title || '';
+  document.getElementById('mdesc').textContent = d.desc || '';
+  
+  // Sol üstteki küçük etiket (Eğer özel olarak girilmemişse şimdilik İLAN yazsın)
+  const badgeEl = document.getElementById('mbadge');
+  if(badgeEl) badgeEl.textContent = 'İLAN';
+  
+  // Özellikleri (meta) virgülden bölüp o şık kutucuklara (grid) dönüştürme
+  let specsHtml = '';
+  let metaText = d.meta || '';
+  let metaDizisi = metaText.split(',');
+  
+  metaDizisi.forEach(item => {
+    if(item.trim() !== '') {
+      let parcalar = item.trim().split(' ');
+      let deger = parcalar.shift() || '-'; // İlk sayıyı/kelimeyi alır (Örn: 320)
+      let etiket = parcalar.join(' ') || ''; // Kalan metni alır (Örn: m²)
+      specsHtml += `<div class="mspec"><div class="mspec-v">${deger}</div><div class="mspec-l">${etiket}</div></div>`;
+    }
+  });
+  
+  // Oluşturulan kutucukları ekrana bas
+  document.getElementById('mspecs').innerHTML = specsHtml;
+  
+  // Modalı aç ve arkadaki sayfanın kaymasını engelle
   document.getElementById('modal').classList.add('open');
-  document.body.style.overflow='hidden';
+  document.body.style.overflow = 'hidden';
 }
-function closeModal(){document.getElementById('modal').classList.remove('open');document.body.style.overflow='';}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
 
 /* Smooth scroll */
 document.querySelectorAll('a[href^="#"]').forEach(a=>{
