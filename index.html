@@ -531,8 +531,8 @@ document.querySelectorAll('.card').forEach((c,i)=>{c.dataset.d=i%3*100;io.observ
                   <div class="card-body" style="color:#0e0e0e">
                     <div class="card-loc">${ilan.location}</div>
                     <div class="card-title">${ilan.title}</div>
-                    <div style="font-size:12px; margin-bottom:10px; color:#666;">${ilan.meta}</div>
-                    <button class="card-link">Detay Gör</button>
+                    <div style="font-size:12px; margin-bottom:10px; color:#666; font-weight:500;">${ilan.meta}</div>
+                    <button class="card-link">Detay Gör <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px;margin-left:4px;"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
                   </div>
                 </article>
               `;
@@ -540,6 +540,24 @@ document.querySelectorAll('.card').forEach((c,i)=>{c.dataset.d=i%3*100;io.observ
 
               // 2. ÖNE ÇIKANLAR (SLIDER) KISMINA EKLE
               if(ilan.featured === true) {
+                
+                // Özellikleri (meta) virgülden bölüp orijinal 3'lü kutu yapısına çevirme
+                let specsHtml = '';
+                let metaText = ilan.meta || '';
+                let metaDizisi = metaText.split(',');
+                
+                metaDizisi.forEach(item => {
+                  if(item.trim() !== '') {
+                    let parcalar = item.trim().split(' ');
+                    let deger = parcalar.shift() || '-'; // İlk sayı/kelime (ör: 320)
+                    let etiket = parcalar.join(' ') || ''; // Kalan kelimeler (ör: m²)
+                    specsHtml += `<div class="sspec"><div class="sspec-v">${deger}</div><div class="sspec-l">${etiket}</div></div>`;
+                  }
+                });
+
+                // Açıklama çok uzunsa taşmaması için kesiyoruz
+                let kisaAciklama = ilan.description ? ilan.description.substring(0, 120) + '...' : '';
+
                 const slide = `
                   <div class="slide ${featuredCount === 0 ? 'active' : ''}" data-id="${i}">
                     <div class="slide-img"><img src="${ilan.image}"/><div class="sl-badge">Öne Çıkan</div></div>
@@ -547,9 +565,9 @@ document.querySelectorAll('.card').forEach((c,i)=>{c.dataset.d=i%3*100;io.observ
                       <div>
                         <div class="slide-cat"><span class="lbl">${ilan.category} · ${ilan.location}</span></div>
                         <h3 class="slide-h">${ilan.title}</h3>
-                        <p class="slide-d">${ilan.description.substring(0, 120)}...</p>
+                        <p class="slide-d">${kisaAciklama}</p>
                         <div class="slide-specs">
-                          <div class="sspec"><div class="sspec-v">${ilan.meta}</div><div class="sspec-l">Özellik</div></div>
+                          ${specsHtml}
                         </div>
                       </div>
                       <button class="btn-g" onclick="openModal(${i})" style="align-self:flex-start">Detayları Gör</button>
@@ -562,27 +580,8 @@ document.querySelectorAll('.card').forEach((c,i)=>{c.dataset.d=i%3*100;io.observ
               }
             });
             
-            // Slider işlevselliğini yeni gelen ilanlara göre başlat
             initSlider(); 
           });
-
-        function initSlider() {
-            // Slider butonlarını ve geçişlerini burada tekrar tanımlıyoruz
-            const slides = document.querySelectorAll('.slide');
-            const dots = document.querySelectorAll('.sdot');
-            let curIdx = 0;
-            if(slides.length === 0) return;
-
-            window.goTo = (i) => {
-                slides[curIdx].classList.remove('active');
-                dots[curIdx].classList.remove('on');
-                curIdx = (i + slides.length) % slides.length;
-                slides[curIdx].classList.add('active');
-                dots[curIdx].classList.add('on');
-            };
-            document.getElementById('next').onclick = () => window.goTo(curIdx + 1);
-            document.getElementById('prev').onclick = () => window.goTo(curIdx - 1);
-        }
 
 /* Modal */
 function openModal(id){
