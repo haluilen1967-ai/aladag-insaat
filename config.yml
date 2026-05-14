@@ -1,0 +1,25 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "ilanlar"
+    label: "İlan Yönetimi"
+    files:
+      - label: "Tüm İlanlar"
+        name: "ilan_verileri"
+        file: "ilanlar_data.json"
+        fields:
+          - label: "İlan Listesi"
+            name: "ilan_listesi"
+            widget: "list"
+            fields:
+              - {label: "İlan Başlığı", name: "title", widget: "string"}
+              - {label: "Kategori (konut, arsa, arac)", name: "category", widget: "string"}
+              - {label: "Konum", name: "location", widget: "string"}
+              - {label: "Açıklama", name: "description", widget: "text"}
+              - {label: "Özellikler (örn: 3+1, Otomatik)", name: "meta", widget: "string"}
+              - {label: "İlan Görseli", name: "image", widget: "image"}

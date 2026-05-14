@@ -491,15 +491,45 @@ const io=new IntersectionObserver(entries=>entries.forEach(e=>{
 }),{threshold:.08});
 document.querySelectorAll('.card').forEach((c,i)=>{c.dataset.d=i%3*100;io.observe(c)});
 
-/* Data */
-const db={
-  1:{img:'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1000&q=85',badge:'Satılık',cat:'Gayrimenkul · Çankaya, Ankara',title:'Modern Villa — Bahçeli & Havuzlu',desc:'Geniş arazi içinde müstakil, güvenlikli sitede modern mimariyle tasarlanmış lüks villa. Doğal taş ve ahşap detaylarıyla öne çıkan bu mülk, özel havuzu ve peyzajlı bahçesiyle sakin ve prestijli bir yaşam sunuyor.',specs:[['320','m²'],['5+1','Oda'],['3','Banyo'],['Müstakil','Kat'],['Doğalgaz','Isıtma'],['3 Yıl','Yaş']]},
-  2:{img:'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1000&q=85',badge:'Kiralık',cat:'Gayrimenkul · Kızılay, Ankara',title:'Yüksek Kat — Merkezi Daire',desc:"Şehir manzaralı, yeni bina içinde tam eşyalı ve modern mutfaklı daire. Metro ve AVM'ye yürüme mesafesinde, kurumsal kiracı için ideal konumda.",specs:[['145','m²'],['3+1','Oda'],['2','Banyo'],['12/15','Kat'],['Merkezi','Isıtma'],['Evet','Eşyalı']]},
-  3:{img:'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=1000&q=85',badge:'Satılık',cat:'Araç Galerisi · 2022 Model',title:'BMW 7 Serisi — 750i xDrive',desc:'Fabrika garantisi devam eden, tek elden kullanılmış lüks sedan. Siyah deri döşeme, panoramik tavan ve sürücü asistanı paketi ile donatılmış kusursuz araç.',specs:[['28.000','km'],['2022','Model'],['530 HP','Güç'],['Otomatik','Vites'],['Benzin','Yakıt'],['Siyah','Renk']]},
-  4:{img:'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1000&q=85',badge:'Satılık',cat:'Gayrimenkul · Bodrum, Muğla',title:'Denize Sıfır — Yazlık Villa',desc:'Denize sıfır konumda, özel iskelesi ve sonsuzluk havuzuyla benzersiz bir yazlık. Yıl boyunca oturuma uygun, tam kapsamlı tadilat görmüş prestijli villa.',specs:[['210','m²'],['4+1','Oda'],['2','Banyo'],['Sonsuzluk','Havuz'],['Özel','İskele'],['Deniz','Cephe']]},
-  5:{img:'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1000&q=85',badge:'Satılık',cat:'Arsa · Etimesgut, Ankara',title:'İmarlı Köşe Parsel — Ticari',desc:"Etimesgut'un hızla gelişen ticaret aksında yer alan, köşe konumlu ve ticari imarlı değerli parsel. AVM ve alışveriş aksına cepheli, yatırım için eşsiz fırsat.",specs:[['850','m²'],['Ticari','İmar'],['0.40','TAKS'],['2.40','KAKS'],['Köşe','Konum'],['Çift','Cephe']]},
-  6:{img:'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1000&q=85',badge:'Satılık',cat:'Araç Galerisi · 2023 Model',title:'Mercedes-Benz E 300 d AMG',desc:'AMG paketi ile donatılmış, sıfır km garantisi devam eden lüks sedan. Panoramik tavan, Burmester ses sistemi ve gece görüş kamerasıyla tam donanımlı.',specs:[['12.000','km'],['2023','Model'],['265 HP','Güç'],['Otomatik','Vites'],['Dizel','Yakıt'],['Obsidyen','Renk']]},
-};
+/* Dinamik İlan Veritabanı (Panelden Çekilen) */
+        let db = {};
+        fetch('/ilanlar_data.json')
+          .then(res => res.json())
+          .then(data => {
+            const grid = document.getElementById('grid');
+            const ilanlar = data.ilan_listesi || [];
+            
+            // Site yüklenirken içinde duran sabit ilanları temizle
+            grid.innerHTML = ''; 
+            
+            ilanlar.forEach((ilan, i) => {
+              // Tıklanınca açılacak Modal penceresi için verileri kaydet
+              db[i] = {
+                title: ilan.title,
+                desc: ilan.description,
+                img: ilan.image,
+                cat: ilan.category + ' · ' + ilan.location
+              };
+              
+              // İlan kartını siteye (vitrine) ekle
+              const card = `
+                <article class='card vis' data-cat='${ilan.category}' onclick='openModal(${i})'>
+                  <div class='card-img'>
+                    <img src='${ilan.image}' alt='${ilan.title}'/>
+                    <div class='card-veil'></div>
+                  </div>
+                  <div class='card-body' style='color:#0e0e0e'>
+                    <div class='card-loc'>${ilan.location}</div>
+                    <div class='card-title'>${ilan.title}</div>
+                    <div style='font-size:12px; margin-bottom:10px; color:#666;'>${ilan.meta}</div>
+                    <button class='card-link'>Detay Gör</button>
+                  </div>
+                </article>
+              `;
+              grid.innerHTML += card;
+            });
+          })
+          .catch(err => console.log('İlanlar henüz eklenmemiş.'));
 
 /* Modal */
 function openModal(id){
