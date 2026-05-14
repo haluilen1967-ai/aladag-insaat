@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Aladağ İnşaat — Gayrimenkul & Galeri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+
+<style>
+:root {
+  --ink:    #0e0e0e;
+  --ink-2:  #1a1a1a;
+  --ink-3:  #2a2a2a;
+  --mist:   #f5f4f1;
+  --mist-2: #eceae5;
+  --mist-3: #dedad2;
+  --stone:  #9a9187;
+  --stone2: #c5bfb5;
+  --gold:   #b8a98a;
+  --gold2:  #d4c4a8;
+  --white:  #ffffff;
+  --ease:   cubic-bezier(0.16,1,0.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--mist);overflow-x:hidden;cursor:none}
+img{display:block;width:100%;object-fit:cover}
+a{text-decoration:none;color:inherit}
+button{border:none;background:none;cursor:none;font-family:inherit}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--ink-2)}
+::-webkit-scrollbar-thumb{background:var(--gold)}
+
+/* Cursor */
+#cur{position:fixed;z-index:9999;pointer-events:none;width:10px;height:10px;border-radius:50%;background:var(--gold);transform:translate(-50%,-50%);transition:width .3s var(--ease),height .3s var(--ease)}
+#cur-ring{position:fixed;z-index:9998;pointer-events:none;width:36px;height:36px;border-radius:50%;border:1px solid rgba(184,169,138,.4);transform:translate(-50%,-50%);transition:all .5s var(--ease)}
+.hoverable:hover~#cur,a:hover~#cur{width:6px;height:6px}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 3rem;height:72px;transition:background .4s,border-color .4s;border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(14,14,14,.97);border-color:var(--ink-3)}
+.nav-logo{display:flex;flex-direction:column}
+.nav-logo .l1{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;letter-spacing:.04em;color:var(--white);line-height:1}
+.nav-logo .l2{font-size:9px;font-weight:300;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-top:3px}
+.nav-links{display:flex;align-items:center;gap:2.5rem}
+.nav-links a{font-size:11px;font-weight:300;letter-spacing:.15em;text-transform:uppercase;color:var(--stone2);transition:color .25s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+.nav-links a:hover{color:var(--white)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-cta{display:flex;align-items:center;gap:.6rem;border:1px solid rgba(184,169,138,.3);padding:.6rem 1.4rem;font-size:11px;font-weight:300;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);transition:all .3s}
+.nav-cta:hover{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.nav-cta svg{width:14px;height:14px;flex-shrink:0}
+
+/* ── HERO ── */
+.hero{position:relative;height:100vh;min-height:700px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1800&q=85') center 30% / cover;transform:scale(1.06);animation:hzoom 14s var(--ease) forwards}
+@keyframes hzoom{to{transform:scale(1)}}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(14,14,14,.15) 0%,rgba(14,14,14,.05) 40%,rgba(14,14,14,.8) 78%,var(--ink) 100%)}
+.hero-grain{position:absolute;inset:0;opacity:.25;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E")}
+.hero-content{position:relative;z-index:2;padding:0 3rem 5rem;display:grid;grid-template-columns:1fr 1fr;align-items:end;gap:4rem}
+.h-eyebrow{display:flex;align-items:center;gap:.75rem;margin-bottom:1.75rem;animation:fadeUp .8s .1s var(--ease) both}
+.h-eyebrow::before{content:'';display:block;width:28px;height:1px;background:var(--gold)}
+.h-eyebrow span{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);font-weight:300}
+.hero-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(3.5rem,6vw,7rem);font-weight:300;line-height:1.0;color:var(--white);animation:fadeUp .9s .2s var(--ease) both}
+.hero-h1 em{font-style:italic;color:var(--gold2)}
+.hero-sub{font-size:13px;font-weight:200;line-height:1.9;color:var(--stone2);max-width:32ch;margin-top:1.5rem;animation:fadeUp .9s .38s var(--ease) both}
+.hero-btns{display:flex;gap:.75rem;margin-top:2.5rem;animation:fadeUp .9s .52s var(--ease) both}
+.btn-g{display:inline-flex;align-items:center;gap:.6rem;background:var(--gold);color:var(--ink);font-size:11px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;padding:.9rem 1.9rem;transition:all .3s var(--ease)}
+.btn-g:hover{background:var(--gold2);transform:translateY(-2px)}
+.btn-o{display:inline-flex;align-items:center;gap:.6rem;border:1px solid rgba(255,255,255,.2);color:var(--stone2);font-size:11px;font-weight:300;letter-spacing:.2em;text-transform:uppercase;padding:.9rem 1.9rem;transition:all .3s}
+.btn-o:hover{border-color:var(--gold);color:var(--gold)}
+.btn-g svg,.btn-o svg{width:14px;height:14px}
+
+/* Hero stats */
+.hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,.06);animation:fadeUp .9s .32s var(--ease) both}
+.hstat{background:rgba(14,14,14,.65);backdrop-filter:blur(16px);padding:2rem 2.25rem}
+.hstat-n{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:var(--white);line-height:1}
+.hstat-l{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--stone);margin-top:.4rem}
+
+/* Scroll indicator */
+.hero-scroll{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;z-index:2;animation:fadeUp 1s 1s var(--ease) both}
+.hero-scroll span{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--stone)}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--stone),transparent);animation:spulse 2s ease-in-out infinite}
+@keyframes spulse{0%,100%{opacity:.35;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.25)}}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── MARQUEE ── */
+.marquee{background:var(--gold);overflow:hidden;padding:.6rem 0}
+.mtrack{display:flex;gap:2.5rem;white-space:nowrap;animation:mar 24s linear infinite}
+.mtrack span{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);font-weight:400}
+.mtrack .dot{color:rgba(14,14,14,.4)}
+@keyframes mar{to{transform:translateX(-50%)}}
+
+/* ── SLIDER SECTION ── */
+.sec-feat{padding:5rem 0;background:var(--ink)}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;padding:0 3rem;margin-bottom:2.5rem}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.8rem);font-weight:300;color:var(--white);line-height:1.1}
+.sec-title em{font-style:italic;color:var(--stone)}
+.lbl{font-size:10px;font-weight:300;letter-spacing:.25em;text-transform:uppercase;color:var(--stone)}
+.ctrl-wrap{display:flex;gap:.5rem}
+.ctrl{width:44px;height:44px;border:1px solid var(--ink-3);color:var(--stone);display:flex;align-items:center;justify-content:center;transition:all .3s}
+.ctrl:hover{border-color:var(--gold);color:var(--gold)}
+.ctrl svg{width:18px;height:18px}
+
+/* Slides */
+.slides{position:relative;overflow:hidden}
+.slide{display:none}
+.slide.active{display:grid;grid-template-columns:1.15fr 1fr;min-height:500px;animation:sIn .65s var(--ease)}
+@keyframes sIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:translateX(0)}}
+.slide-img{position:relative;overflow:hidden}
+.slide-img img{height:100%;transition:transform 8s ease}
+.slide.active .slide-img img{transform:scale(1.04)}
+.sl-badge{position:absolute;top:1.25rem;left:1.25rem;background:var(--gold);color:var(--ink);font-size:9px;letter-spacing:.25em;text-transform:uppercase;padding:.35rem .9rem}
+.slide-body{background:var(--ink-2);padding:3.5rem;display:flex;flex-direction:column;justify-content:space-between}
+.slide-cat{margin-bottom:1.25rem}
+.slide-h{font-family:'Cormorant Garamond',serif;font-size:2.3rem;font-weight:300;line-height:1.15;color:var(--white);margin-bottom:1rem}
+.slide-d{font-size:13px;font-weight:200;line-height:1.85;color:var(--stone2);max-width:36ch;margin-bottom:2rem}
+.slide-specs{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--ink-3);margin-bottom:2rem}
+.sspec{background:var(--ink-2);padding:1rem}
+.sspec-v{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;color:var(--white)}
+.sspec-l{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--stone);margin-top:.25rem}
+.sdots{display:flex;gap:.4rem;padding:0 3rem;margin-top:1.25rem}
+.sdot{width:24px;height:2px;background:var(--ink-3);transition:all .4s var(--ease)}
+.sdot.on{width:48px;background:var(--gold)}
+
+/* ── LISTINGS ── */
+.sec-list{padding:5.5rem 3rem;background:var(--mist)}
+.sec-list .sec-title{color:var(--ink)}
+.sec-list .sec-title em{color:var(--stone)}
+.sec-list .lbl{color:var(--stone)}
+.filter-bar{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:2rem}
+.fb{font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:300;padding:.5rem 1.1rem;border:1px solid var(--mist-3);color:var(--stone);transition:all .25s}
+.fb:hover{border-color:var(--ink);color:var(--ink)}
+.fb.on{background:var(--ink);color:var(--mist);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;margin-top:2.5rem;background:var(--mist-3)}
+.card{background:var(--mist);overflow:hidden;opacity:0;transform:translateY(28px);transition:opacity .6s var(--ease),transform .6s var(--ease),box-shadow .3s}
+.card.vis{opacity:1;transform:translateY(0)}
+.card:hover{box-shadow:0 16px 50px rgba(14,14,14,.14);transform:translateY(-5px) scale(1.005);z-index:2}
+.card-img{position:relative;height:230px;overflow:hidden}
+.card-img img{height:100%;transition:transform .6s var(--ease)}
+.card:hover .card-img img{transform:scale(1.07)}
+.card-veil{position:absolute;inset:0;background:linear-gradient(to top,rgba(14,14,14,.45) 0%,transparent 55%);opacity:0;transition:opacity .4s}
+.card:hover .card-veil{opacity:1}
+.cbadge{position:absolute;top:.9rem;left:.9rem;font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:.3rem .75rem}
+.cbadge.sl{background:var(--ink);color:var(--mist)}
+.cbadge.kr{background:var(--mist);color:var(--ink)}
+.card-body{padding:1.4rem}
+.card-loc{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--stone);margin-bottom:.5rem}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:400;color:var(--ink);line-height:1.3;margin-bottom:.85rem}
+.card-meta{display:flex;gap:1.2rem;font-size:11px;color:var(--stone);font-weight:300;padding-top:.9rem;border-top:1px solid var(--mist-3);margin-bottom:.75rem}
+.card-link{display:inline-flex;align-items:center;gap:.4rem;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);font-weight:400;border-bottom:1px solid transparent;padding-bottom:1px;transition:border-color .25s,gap .25s}
+.card-link:hover{border-color:var(--ink);gap:.65rem}
+.card-link svg{width:11px;height:11px}
+
+/* ── CONTACT ── */
+.sec-contact{position:relative;overflow:hidden;background:var(--ink-2);padding:7rem 3rem;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.sec-contact::before,.sec-contact::after{content:'';position:absolute;border-radius:50%;pointer-events:none;right:-8rem}
+.sec-contact::before{width:38rem;height:38rem;top:-8rem;border:1px solid rgba(184,169,138,.06)}
+.sec-contact::after{width:22rem;height:22rem;top:-4rem;border:1px solid rgba(184,169,138,.1)}
+.c-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,4vw,4rem);font-weight:300;color:var(--white);line-height:1.1;margin:1.25rem 0}
+.c-title em{font-style:italic;color:var(--gold2)}
+.c-sub{font-size:13px;font-weight:200;line-height:1.9;color:var(--stone2);max-width:36ch}
+.c-cards{display:flex;flex-direction:column;gap:1px;background:var(--ink-3)}
+.c-card{background:var(--ink-2);padding:1.65rem 2rem;display:flex;align-items:center;gap:1.25rem;transition:background .3s}
+.c-card:hover{background:rgba(184,169,138,.05)}
+.c-icon{width:44px;height:44px;flex-shrink:0;border:1px solid var(--ink-3);display:flex;align-items:center;justify-content:center;color:var(--gold);transition:all .3s}
+.c-icon svg{width:18px;height:18px}
+.c-card:hover .c-icon{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.c-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--stone);margin-bottom:.25rem}
+.c-val{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:var(--white)}
+.c-cta{margin-top:1.75rem;display:inline-flex;align-items:center;gap:.7rem;background:var(--gold);color:var(--ink);font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:400;padding:1rem 2rem;transition:all .3s}
+.c-cta:hover{background:var(--gold2);transform:translateY(-2px)}
+.c-cta svg{width:16px;height:16px}
+
+/* ── FOOTER ── */
+footer{padding:1.75rem 3rem;background:var(--ink);border-top:1px solid var(--ink-3);display:flex;align-items:center;justify-content:space-between}
+.foot-logo{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--white)}
+.foot-copy{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--stone)}
+.foot-links{display:flex;gap:1.5rem}
+.foot-links a{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--stone);transition:color .25s}
+.foot-links a:hover{color:var(--gold)}
+
+/* ── MODAL ── */
+#modal{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity .4s}
+#modal.open{opacity:1;pointer-events:all}
+#mscrim{position:absolute;inset:0;background:rgba(14,14,14,.88);backdrop-filter:blur(10px)}
+#mbox{position:relative;z-index:1;background:var(--ink-2);width:min(720px,94vw);max-height:90vh;overflow-y:auto;transform:translateY(20px) scale(.98);transition:transform .45s var(--ease)}
+#mbox::-webkit-scrollbar{width:2px}
+#mbox::-webkit-scrollbar-thumb{background:var(--gold)}
+#modal.open #mbox{transform:translateY(0) scale(1)}
+#mcls{position:absolute;top:1rem;right:1rem;z-index:2;width:36px;height:36px;background:rgba(14,14,14,.75);display:flex;align-items:center;justify-content:center;color:var(--stone2);transition:all .25s}
+#mcls:hover{background:var(--gold);color:var(--ink)}
+#mcls svg{width:15px;height:15px}
+#mimg-w{position:relative;height:300px;overflow:hidden}
+#mimg{height:100%;width:100%;object-fit:cover}
+#mimg-g{position:absolute;inset:0;background:linear-gradient(to top,var(--ink-2) 0%,transparent 55%)}
+.m-badge{position:absolute;top:1.25rem;left:1.25rem;background:var(--gold);color:var(--ink);font-size:9px;letter-spacing:.25em;text-transform:uppercase;padding:.35rem .85rem}
+.m-body{padding:2.5rem}
+.m-title{font-family:'Cormorant Garamond',serif;font-size:2.1rem;font-weight:300;color:var(--white);line-height:1.2;margin:.75rem 0 1rem}
+.m-desc{font-size:13px;font-weight:200;line-height:1.9;color:var(--stone2);margin-bottom:2rem}
+.m-specs{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--ink-3);margin-bottom:2rem}
+.mspec{background:var(--ink-2);padding:1.2rem}
+.mspec-v{font-family:'Cormorant Garamond',serif;font-size:1.55rem;color:var(--white)}
+.mspec-l{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--stone);margin-top:.25rem}
+.m-phone{background:var(--ink-3);padding:2rem;text-align:center}
+.m-phone a{display:inline-flex;align-items:center;gap:.75rem;font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:300;color:var(--gold);margin-top:.75rem;transition:color .25s}
+.m-phone a:hover{color:var(--gold2)}
+.m-phone a svg{width:22px;height:22px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  nav{padding:0 1.5rem}
+  .nav-links{display:none}
+  .hero-content{grid-template-columns:1fr;padding:0 1.5rem 3.5rem}
+  .hero-stats{display:none}
+  .sec-head{padding:0 1.5rem;flex-direction:column;align-items:flex-start;gap:1.25rem}
+  .slide.active{grid-template-columns:1fr}
+  .slide-body{padding:2rem}
+  .sdots{padding:0 1.5rem}
+  .sec-list{padding:4rem 1.5rem}
+  .grid{grid-template-columns:1fr 1fr}
+  .sec-contact{grid-template-columns:1fr;padding:4rem 1.5rem}
+  footer{flex-direction:column;gap:1rem;padding:2rem 1.5rem;text-align:center}
+  .foot-links{display:none}
+}
+@media(max-width:580px){
+  .grid{grid-template-columns:1fr}
+  .m-specs{grid-template-columns:1fr 1fr}
+  .hero-btns{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <span class="l1">Aladağ İnşaat</span>
+    <span class="l2">Gayrimenkul · Galeri · Ankara</span>
+  </a>
+  <div class="nav-links">
+    <a href="#feat">Öne Çıkanlar</a>
+    <a href="#list">İlanlar</a>
+    <a href="#contact">İletişim</a>
+  </div>
+  <a href="tel:+905001234567" class="nav-cta">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C11 21 3 13 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
+    Bizi Arayın
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-content">
+    <div>
+      <div class="h-eyebrow"><span>Kuruluş 1998 — Ankara</span></div>
+      <h1 class="hero-h1">Prestij,<br/><em>güven</em> ve<br/>uzmanlık.</h1>
+      <p class="hero-sub">25 yıllık köklü deneyimimizle gayrimenkul ve araç portföyünüzü en doğru ellere teslim ediyoruz.</p>
+      <div class="hero-btns">
+        <a href="#list" class="btn-g">İlanları Keşfet <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        <a href="tel:+905001234567" class="btn-o">+90 500 123 45 67</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-n">25+</div><div class="hstat-l">Yıl Deneyim</div></div>
+      <div class="hstat"><div class="hstat-n">480</div><div class="hstat-l">Tamamlanan İşlem</div></div>
+      <div class="hstat"><div class="hstat-n">%98</div><div class="hstat-l">Müşteri Memnuniyeti</div></div>
+      <div class="hstat"><div class="hstat-n">7</div><div class="hstat-l">Aktif Proje</div></div>
+    </div>
+  </div>
+  <div class="hero-scroll"><span>Keşfet</span><div class="scroll-line"></div></div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="mtrack">
+    <span>Satılık Villalar</span><span class="dot">·</span><span>Kiralık Daireler</span><span class="dot">·</span><span>Lüks Araçlar</span><span class="dot">·</span><span>Ticari Gayrimenkul</span><span class="dot">·</span><span>Arsa &amp; Parsel</span><span class="dot">·</span><span>Yatırım Fırsatları</span><span class="dot">·</span><span>Satılık Villalar</span><span class="dot">·</span><span>Kiralık Daireler</span><span class="dot">·</span><span>Lüks Araçlar</span><span class="dot">·</span><span>Ticari Gayrimenkul</span><span class="dot">·</span><span>Arsa &amp; Parsel</span><span class="dot">·</span><span>Yatırım Fırsatları</span><span class="dot">·</span>
+  </div>
+</div>
+
+<!-- FEATURED SLIDER -->
+<section class="sec-feat" id="feat">
+  <div class="sec-head">
+    <div>
+      <div class="lbl" style="margin-bottom:.6rem">— Seçkimiz</div>
+      <h2 class="sec-title">Öne çıkan<br/><em>ilanlar</em></h2>
+    </div>
+    <div class="ctrl-wrap">
+      <button class="ctrl" id="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 19l-7-7 7-7"/></svg></button>
+      <button class="ctrl" id="next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+  </div>
+  <div class="slides" id="slider">
+    <!-- S1 -->
+    <div class="slide active" data-id="1">
+      <div class="slide-img"><img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1000&q=85" alt="Villa"/><div class="sl-badge">Satılık</div></div>
+      <div class="slide-body">
+        <div>
+          <div class="slide-cat"><span class="lbl">Gayrimenkul · Çankaya, Ankara</span></div>
+          <h3 class="slide-h">Modern Villa<br/>Bahçeli &amp; Havuzlu</h3>
+          <p class="slide-d">Geniş arazi içinde müstakil, güvenlikli sitede modern mimariyle tasarlanmış lüks villa. Özel havuzu ve peyzajlı bahçesiyle eşsiz bir yaşam.</p>
+          <div class="slide-specs">
+            <div class="sspec"><div class="sspec-v">320</div><div class="sspec-l">m²</div></div>
+            <div class="sspec"><div class="sspec-v">5+1</div><div class="sspec-l">Oda</div></div>
+            <div class="sspec"><div class="sspec-v">3</div><div class="sspec-l">Banyo</div></div>
+          </div>
+        </div>
+        <button class="btn-g" onclick="openModal(1)" style="align-self:flex-start">Detayları Gör <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+    <!-- S2 -->
+    <div class="slide" data-id="2">
+      <div class="slide-img"><img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1000&q=85" alt="Daire"/><div class="sl-badge">Kiralık</div></div>
+      <div class="slide-body">
+        <div>
+          <div class="slide-cat"><span class="lbl">Gayrimenkul · Kızılay, Ankara</span></div>
+          <h3 class="slide-h">Yüksek Kat<br/>Merkezi Daire</h3>
+          <p class="slide-d">Şehir manzaralı, tam eşyalı ve modern mutfaklı prestijli daire. Metro ve AVM'ye yürüme mesafesinde kurumsal kiracı için ideal.</p>
+          <div class="slide-specs">
+            <div class="sspec"><div class="sspec-v">145</div><div class="sspec-l">m²</div></div>
+            <div class="sspec"><div class="sspec-v">3+1</div><div class="sspec-l">Oda</div></div>
+            <div class="sspec"><div class="sspec-v">2</div><div class="sspec-l">Banyo</div></div>
+          </div>
+        </div>
+        <button class="btn-g" onclick="openModal(2)" style="align-self:flex-start">Detayları Gör <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+    <!-- S3 -->
+    <div class="slide" data-id="3">
+      <div class="slide-img"><img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=1000&q=85" alt="BMW"/><div class="sl-badge">Satılık</div></div>
+      <div class="slide-body">
+        <div>
+          <div class="slide-cat"><span class="lbl">Araç Galerisi · 2022 Model</span></div>
+          <h3 class="slide-h">BMW 7 Serisi<br/>750i xDrive</h3>
+          <p class="slide-d">Fabrika garantisi devam eden, tek elden bakımlı lüks sedan. Panoramik tavan ve sürücü asistanı paketi ile kusursuz durumdaki araç.</p>
+          <div class="slide-specs">
+            <div class="sspec"><div class="sspec-v">28K</div><div class="sspec-l">km</div></div>
+            <div class="sspec"><div class="sspec-v">2022</div><div class="sspec-l">Model</div></div>
+            <div class="sspec"><div class="sspec-v">530</div><div class="sspec-l">HP</div></div>
+          </div>
+        </div>
+        <button class="btn-g" onclick="openModal(3)" style="align-self:flex-start">Detayları Gör <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+  </div>
+  <div class="sdots" style="margin-top:1.25rem">
+    <div class="sdot on"></div><div class="sdot"></div><div class="sdot"></div>
+  </div>
+</section>
+
+<!-- LISTINGS -->
+<section class="sec-list" id="list">
+  <div class="lbl" style="margin-bottom:.6rem">— Portföy</div>
+  <h2 class="sec-title">Tüm <em>ilanlar</em></h2>
+  <div class="filter-bar">
+    <button class="fb on" id="f-all" onclick="doFilter('all')">Tümü</button>
+    <button class="fb" id="f-konut" onclick="doFilter('konut')">Konut</button>
+    <button class="fb" id="f-arsa" onclick="doFilter('arsa')">Arsa</button>
+    <button class="fb" id="f-arac" onclick="doFilter('arac')">Araç</button>
+  </div>
+  <div class="grid" id="grid">
+    <article class="card" data-cat="konut" onclick="openModal(1)">
+      <div class="card-img"><img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=75" alt="Villa"/><div class="card-veil"></div><span class="cbadge sl">Satılık</span></div>
+      <div class="card-body"><div class="card-loc">Çankaya, Ankara</div><div class="card-title">Modern Villa — Bahçeli &amp; Havuzlu</div><div class="card-meta"><span>320 m²</span><span>5+1</span><span>3 Banyo</span></div><button class="card-link">Detay Gör <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    </article>
+    <article class="card" data-cat="konut" onclick="openModal(2)">
+      <div class="card-img"><img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&q=75" alt="Daire"/><div class="card-veil"></div><span class="cbadge kr">Kiralık</span></div>
+      <div class="card-body"><div class="card-loc">Kızılay, Ankara</div><div class="card-title">Yüksek Kat — Merkezi Daire</div><div class="card-meta"><span>145 m²</span><span>3+1</span><span>2 Banyo</span></div><button class="card-link">Detay Gör <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    </article>
+    <article class="card" data-cat="arac" onclick="openModal(3)">
+      <div class="card-img"><img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600&q=75" alt="BMW"/><div class="card-veil"></div><span class="cbadge sl">Satılık</span></div>
+      <div class="card-body"><div class="card-loc">Araç Galerisi · 2022</div><div class="card-title">BMW 7 Serisi — 750i xDrive</div><div class="card-meta"><span>28.000 km</span><span>Otomatik</span><span>530 HP</span></div><button class="card-link">Detay Gör <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    </article>
+    <article class="card" data-cat="konut" onclick="openModal(4)">
+      <div class="card-img"><img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=75" alt="Yazlık"/><div class="card-veil"></div><span class="cbadge sl">Satılık</span></div>
+      <div class="card-body"><div class="card-loc">Bodrum, Muğla</div><div class="card-title">Denize Sıfır — Yazlık Villa</div><div class="card-meta"><span>210 m²</span><span>4+1</span><span>Havuzlu</span></div><button class="card-link">Detay Gör <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    </article>
+    <article class="card" data-cat="arsa" onclick="openModal(5)">
+      <div class="card-img"><img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=600&q=75" alt="Arsa"/><div class="card-veil"></div><span class="cbadge sl">Satılık</span></div>
+      <div class="card-body"><div class="card-loc">Etimesgut, Ankara</div><div class="card-title">İmarlı Köşe Parsel — Ticari</div><div class="card-meta"><span>850 m²</span><span>Ticari İmarlı</span></div><button class="card-link">Detay Gör <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    </article>
+    <article class="card" data-cat="arac" onclick="openModal(6)">
+      <div class="card-img"><img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=600&q=75" alt="Mercedes"/><div class="card-veil"></div><span class="cbadge sl">Satılık</span></div>
+      <div class="card-body"><div class="card-loc">Araç Galerisi · 2023</div><div class="card-title">Mercedes-Benz E 300 d AMG</div><div class="card-meta"><span>12.000 km</span><span>Otomatik</span><span>265 HP</span></div><button class="card-link">Detay Gör <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    </article>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="sec-contact" id="contact">
+  <div>
+    <div class="lbl">— İletişim</div>
+    <h2 class="c-title">Sorunuz mu var?<br/><em>Hemen ulaşın.</em></h2>
+    <p class="c-sub">Uzman kadromuz hafta içi 09:00–18:00 arasında sizi bekliyor. Güven, şeffaflık ve hız bizim önceliğimiz.</p>
+  </div>
+  <div>
+    <div class="c-cards">
+      <a href="tel:+905001234567" class="c-card">
+        <div class="c-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C11 21 3 13 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg></div>
+        <div><div class="c-label">Telefon</div><div class="c-val">+90 500 123 45 67</div></div>
+      </a>
+      <a href="https://wa.me/905001234567" target="_blank" class="c-card">
+        <div class="c-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.06L2 22l5.06-1.36A9.93 9.93 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.19 14.22c-.22.62-1.29 1.18-1.78 1.25-.45.06-.99.08-1.6-.1-.37-.11-.84-.27-1.44-.53-2.52-1.09-4.17-3.63-4.3-3.8-.13-.17-1.05-1.39-1.05-2.65s.66-1.88.9-2.14c.24-.26.52-.32.7-.32l.5.01c.16.01.38-.06.59.45l.76 1.84c.06.15.1.33.01.53l-.28.61-.41.43c-.14.14-.29.29-.12.58.17.29.74 1.22 1.59 1.97.1.09.2.19.31.27.61.48 1.29.78 1.48.86.28.12.45.1.61-.06l.44-.51c.17-.2.34-.15.57-.09l1.81.85c.21.1.35.14.4.22.05.08.05.45-.17 1.07z"/></svg></div>
+        <div><div class="c-label">WhatsApp</div><div class="c-val">Mesaj Gönderin</div></div>
+      </a>
+      <div class="c-card">
+        <div class="c-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+        <div><div class="c-label">Adres</div><div class="c-val" style="font-size:1rem;line-height:1.4">Kızılay Mah. Atatürk Blv. No:12<br/>Çankaya / Ankara</div></div>
+      </div>
+    </div>
+    <a href="tel:+905001234567" class="c-cta"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C11 21 3 13 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>Şimdi Ara — +90 500 123 45 67</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-logo">Aladağ İnşaat</div>
+  <div class="foot-copy">© 2024 Aladağ İnşaat. Tüm hakları saklıdır.</div>
+  <div class="foot-links"><a href="#feat">Öne Çıkanlar</a><a href="#list">İlanlar</a><a href="#contact">İletişim</a></div>
+</footer>
+
+<!-- MODAL -->
+<div id="modal">
+  <div id="mscrim" onclick="closeModal()"></div>
+  <div id="mbox">
+    <button id="mcls" onclick="closeModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    <div id="mimg-w"><img id="mimg" src="" alt=""/><div id="mimg-g"></div><div class="m-badge" id="mbadge"></div></div>
+    <div class="m-body">
+      <div class="lbl" id="mcat"></div>
+      <h2 class="m-title" id="mtitle"></h2>
+      <p class="m-desc" id="mdesc"></p>
+      <div class="m-specs" id="mspecs"></div>
+      <div class="m-phone">
+        <div class="lbl">Bu ilan hakkında bilgi alın</div>
+        <a href="tel:+905001234567"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C11 21 3 13 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>+90 500 123 45 67</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Cursor */
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
+let rx=0,ry=0,cx=0,cy=0;
+document.addEventListener('mousemove',e=>{cx=e.clientX;cy=e.clientY;cur.style.cssText+=`;left:${cx}px;top:${cy}px`});
+(function loop(){rx+=(cx-rx)*.11;ry+=(cy-ry)*.11;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.transform='translate(-50%,-50%) scale(.5)';ring.style.cssText+=';width:52px;height:52px;border-color:var(--gold)'});
+  el.addEventListener('mouseleave',()=>{cur.style.transform='translate(-50%,-50%) scale(1)';ring.style.cssText+=';width:36px;height:36px;border-color:rgba(184,169,138,.4)'});
+});
+
+/* Nav scroll */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60),{passive:true});
+
+/* Slider */
+const slides=document.querySelectorAll('.slide'),dots=document.querySelectorAll('.sdot');
+let cur2=0,tmr;
+function goTo(i){
+  slides[cur2].classList.remove('active');dots[cur2].classList.remove('on');
+  cur2=(i+slides.length)%slides.length;
+  slides[cur2].classList.add('active');dots[cur2].classList.add('on');
+  clearInterval(tmr);tmr=setInterval(()=>goTo(cur2+1),10000);
+}
+document.getElementById('prev').onclick=()=>goTo(cur2-1);
+document.getElementById('next').onclick=()=>goTo(cur2+1);
+tmr=setInterval(()=>goTo(cur2+1),10000);
+
+/* Filter */
+function doFilter(cat){
+  document.querySelectorAll('.fb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('f-'+cat).classList.add('on');
+  document.querySelectorAll('#grid .card').forEach(c=>{c.style.display=(cat==='all'||c.dataset.cat===cat)?'':'none'});
+}
+
+/* Reveal */
+const io=new IntersectionObserver(entries=>entries.forEach(e=>{
+  if(e.isIntersecting){setTimeout(()=>e.target.classList.add('vis'),+e.target.dataset.d||0);io.unobserve(e.target)}
+}),{threshold:.08});
+document.querySelectorAll('.card').forEach((c,i)=>{c.dataset.d=i%3*100;io.observe(c)});
+
+/* Data */
+const db={
+  1:{img:'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1000&q=85',badge:'Satılık',cat:'Gayrimenkul · Çankaya, Ankara',title:'Modern Villa — Bahçeli & Havuzlu',desc:'Geniş arazi içinde müstakil, güvenlikli sitede modern mimariyle tasarlanmış lüks villa. Doğal taş ve ahşap detaylarıyla öne çıkan bu mülk, özel havuzu ve peyzajlı bahçesiyle sakin ve prestijli bir yaşam sunuyor.',specs:[['320','m²'],['5+1','Oda'],['3','Banyo'],['Müstakil','Kat'],['Doğalgaz','Isıtma'],['3 Yıl','Yaş']]},
+  2:{img:'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1000&q=85',badge:'Kiralık',cat:'Gayrimenkul · Kızılay, Ankara',title:'Yüksek Kat — Merkezi Daire',desc:"Şehir manzaralı, yeni bina içinde tam eşyalı ve modern mutfaklı daire. Metro ve AVM'ye yürüme mesafesinde, kurumsal kiracı için ideal konumda.",specs:[['145','m²'],['3+1','Oda'],['2','Banyo'],['12/15','Kat'],['Merkezi','Isıtma'],['Evet','Eşyalı']]},
+  3:{img:'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=1000&q=85',badge:'Satılık',cat:'Araç Galerisi · 2022 Model',title:'BMW 7 Serisi — 750i xDrive',desc:'Fabrika garantisi devam eden, tek elden kullanılmış lüks sedan. Siyah deri döşeme, panoramik tavan ve sürücü asistanı paketi ile donatılmış kusursuz araç.',specs:[['28.000','km'],['2022','Model'],['530 HP','Güç'],['Otomatik','Vites'],['Benzin','Yakıt'],['Siyah','Renk']]},
+  4:{img:'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1000&q=85',badge:'Satılık',cat:'Gayrimenkul · Bodrum, Muğla',title:'Denize Sıfır — Yazlık Villa',desc:'Denize sıfır konumda, özel iskelesi ve sonsuzluk havuzuyla benzersiz bir yazlık. Yıl boyunca oturuma uygun, tam kapsamlı tadilat görmüş prestijli villa.',specs:[['210','m²'],['4+1','Oda'],['2','Banyo'],['Sonsuzluk','Havuz'],['Özel','İskele'],['Deniz','Cephe']]},
+  5:{img:'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1000&q=85',badge:'Satılık',cat:'Arsa · Etimesgut, Ankara',title:'İmarlı Köşe Parsel — Ticari',desc:"Etimesgut'un hızla gelişen ticaret aksında yer alan, köşe konumlu ve ticari imarlı değerli parsel. AVM ve alışveriş aksına cepheli, yatırım için eşsiz fırsat.",specs:[['850','m²'],['Ticari','İmar'],['0.40','TAKS'],['2.40','KAKS'],['Köşe','Konum'],['Çift','Cephe']]},
+  6:{img:'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1000&q=85',badge:'Satılık',cat:'Araç Galerisi · 2023 Model',title:'Mercedes-Benz E 300 d AMG',desc:'AMG paketi ile donatılmış, sıfır km garantisi devam eden lüks sedan. Panoramik tavan, Burmester ses sistemi ve gece görüş kamerasıyla tam donanımlı.',specs:[['12.000','km'],['2023','Model'],['265 HP','Güç'],['Otomatik','Vites'],['Dizel','Yakıt'],['Obsidyen','Renk']]},
+};
+
+/* Modal */
+function openModal(id){
+  const d=db[id];if(!d)return;
+  document.getElementById('mimg').src=d.img;
+  document.getElementById('mbadge').textContent=d.badge;
+  document.getElementById('mcat').textContent=d.cat;
+  document.getElementById('mtitle').textContent=d.title;
+  document.getElementById('mdesc').textContent=d.desc;
+  document.getElementById('mspecs').innerHTML=d.specs.map(([v,l])=>`<div class="mspec"><div class="mspec-v">${v}</div><div class="mspec-l">${l}</div></div>`).join('');
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');document.body.style.overflow='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+
+/* Smooth scroll */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'})}});
+});
+</script>
+</body>
+</html>
